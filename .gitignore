@@ -1,0 +1,29 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+ENV/
+
+# jenv (Java env manager)
+.jenv/
+
+# IDE/editor configs
+.vscode/
+.idea/
+
+# Scrapy outputs
+output.json
+*.csv
+*.xml
+*.jl
+*.log
+*.job
+*.json
+# Selenium downloads
+*.crdownload
