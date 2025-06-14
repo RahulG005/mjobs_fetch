@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.service import Service
 import time
 
 class TdJobsSpider(scrapy.Spider):
-    name = "Ajobs"
+    name = "Ajobsworkdayjobs"
 
     def __init__(self, *args, **kwargs):
         super(TdJobsSpider, self).__init__(*args, **kwargs)
@@ -43,7 +43,7 @@ class TdJobsSpider(scrapy.Spider):
             for job in jobs:
                 title = job.text.strip()
                 print(f"🟩 [DEBUG] Extracted job title: '{title}'")
-                if not any(word.lower() in title.lower() for word in ["Senior", "Lead", "Director", "bilingual", "Engineer", "Manager", "Testing", "finance", "financial", "III", "security", "IV", "scientist", "personal", "portfolio", "sr.", "sr "]):
+                if not any(word.lower() in title.lower() for word in ["Senior","Application","Co-Op", "Lead", "Director", "bilingual", "Engineer", "Manager", "Testing", "finance", "financial", "III", "security", "IV", "scientist", "personal", "portfolio", "sr.", "sr "]):
                     try:
                         job_card = job.find_element(By.XPATH, "./ancestor::li[.//a[@data-automation-id='jobTitle']]")
                         date_elem = job_card.find_element(By.XPATH, ".//div[@data-automation-id='postedOn']//dd")
