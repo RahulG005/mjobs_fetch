@@ -21,7 +21,7 @@ class TdJobsSpider(scrapy.Spider):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
         
          # Read URLs from a text file (one per line)
-        with open('company_list.txt', 'r') as f:
+        with open('workdaycompanylist.txt', 'r') as f:
             self.start_urls = [line.strip() for line in f if line.strip()]
 
     def start_requests(self):
