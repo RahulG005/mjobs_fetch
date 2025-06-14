@@ -19,10 +19,14 @@ class TdJobsSpider(scrapy.Spider):
         options.add_argument('--disable-dev-shm-usage')
 
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        
+         # Read URLs from a text file (one per line)
+        with open('company_list.txt', 'r') as f:
+            self.start_urls = [line.strip() for line in f if line.strip()]
 
     def start_requests(self):
-        url = "https://td.wd3.myworkdayjobs.com/en-US/TD_Bank_Careers?locationCountry=a30a87ed25634629aa6c3958aa2b91ea&timeType=14c9322ea8e3014f4096d9d2dc025400"
-        yield scrapy.Request(url=url, callback=self.parse)
+        for url in self.start_urls:
+            yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         self.driver.get(response.url)
@@ -39,7 +43,7 @@ class TdJobsSpider(scrapy.Spider):
             for job in jobs:
                 title = job.text.strip()
                 print(f"🟩 [DEBUG] Extracted job title: '{title}'")
-                if not any(word.lower() in title.lower() for word in ["Senior", "Lead", "Director", "bilingual", "Engineer", "Manager", "Testing", "finance", "financial", "III", "security", "IV", "scientist", "personal", "portfolio"]):
+                if not any(word.lower() in title.lower() for word in ["Senior", "Lead", "Director", "bilingual", "Engineer", "Manager", "Testing", "finance", "financial", "III", "security", "IV", "scientist", "personal", "portfolio", "sr.", "sr "]):
                     try:
                         job_card = job.find_element(By.XPATH, "./ancestor::li[.//a[@data-automation-id='jobTitle']]")
                         date_elem = job_card.find_element(By.XPATH, ".//div[@data-automation-id='postedOn']//dd")
@@ -72,4 +76,8 @@ class TdJobsSpider(scrapy.Spider):
                 print("🛑 [INFO] 'Next' button not found. Likely reached the last page of results.")
                 break
         print(f"🏁 [SUMMARY] Total pages scraped: {page_num}")
-        self.driver.quit()
+        
+    def closed(self, reason):
+        if self.driver:
+            self.driver.quit()
+
