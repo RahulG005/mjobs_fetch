@@ -7,11 +7,11 @@ from datetime import datetime
 from selenium.webdriver.chrome.service import Service
 import time
 
-class TdJobsSpider(scrapy.Spider):
-    name = "Ajobsworkdayjobs"
+class workdayspider(scrapy.Spider):
+    name = "workdayspider"
 
     def __init__(self, *args, **kwargs):
-        super(TdJobsSpider, self).__init__(*args, **kwargs)
+        super(workdayspider, self).__init__(*args, **kwargs)
 
         options = Options()
         options.add_argument('--headless')
