@@ -75,6 +75,7 @@ class workdayspider(scrapy.Spider):
             except Exception:
                 print("🛑 [INFO] 'Next' button not found. Likely reached the last page of results.")
                 break
+            
         print(f"🏁 [SUMMARY] Total pages scraped: {page_num}")
         
     def closed(self, reason):

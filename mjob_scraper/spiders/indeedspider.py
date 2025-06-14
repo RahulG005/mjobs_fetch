@@ -32,7 +32,6 @@ class IndeedSpider(scrapy.Spider):
         self.driver.get(response.url)
         time.sleep(3)
 
-        today = datetime.today().strftime('%b %d, %Y')
         page_num = 1
 
         while True:
@@ -58,7 +57,6 @@ class IndeedSpider(scrapy.Spider):
                         yield {
                             "title": title,
                             "link": link,
-                            "date": today  # Indeed doesn't show post date in anchor tag directly
                         }
                     except Exception as e:
                         print(f"❌ [ERROR] Failed to extract link for job '{title}': {e}")
@@ -67,17 +65,21 @@ class IndeedSpider(scrapy.Spider):
 
                 time.sleep(1)
 
-            try:
-                next_btn = self.driver.find_element(By.XPATH, "//a[contains(@aria-label, 'Next')]")
-                if "aria-disabled" in next_btn.get_attribute("outerHTML"):
-                    print("🛑 [INFO] 'Next' button is disabled. Stopping pagination.")
+                try:
+                    next_btn = self.driver.find_element(By.XPATH, "//a[@aria-label='Next page']")
+                    next_href = next_btn.get_attribute("href")
+                    if not next_href:
+                        print("🛑 [INFO] 'Next' button has no href attribute — stopping pagination.")
+                        break
+                    print(f"➡️ [DEBUG] Navigating to next page: {next_href}")
+                    self.driver.get(next_href)
+                    page_num += 1
+                    time.sleep(3)
+                except Exception:
+                    print("🛑 [INFO] 'Next' button not found — reached last page.")
                     break
-                next_btn.click()
-                page_num += 1
-                time.sleep(3)
-            except Exception as e:
-                print(f"🛑 [INFO] Pagination ended or failed: {e}")
-                break
+
+
 
         print(f"🏁 [SUMMARY] Total pages scraped: {page_num}")
 
