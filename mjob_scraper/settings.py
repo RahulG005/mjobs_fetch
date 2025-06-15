@@ -91,3 +91,14 @@ ROBOTSTXT_OBEY = True
 
 # Set settings whose default value is deprecated to a future-proof value
 FEED_EXPORT_ENCODING = "utf-8"
+
+FEEDS = {
+    'output.json': {
+        'format': 'json',
+        'encoding': 'utf8',
+        'store_empty': False,
+        'fields': None,
+        'indent': 4,
+        'overwrite': False,  # This will append results from each spider
+    },
+}

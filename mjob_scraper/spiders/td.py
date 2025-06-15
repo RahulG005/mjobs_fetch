@@ -6,20 +6,23 @@ from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
 from selenium.webdriver.chrome.service import Service
 import time
+import os
 
-class workdayspider(scrapy.Spider):
-    name = "workdayspider"
+def load_exclude_words(filename="exclude_words.txt"):
+    # Get the absolute path to project root
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(project_root, filename)
+    with open(file_path, "r") as f:
+        return [line.strip() for line in f if line.strip()]
+
+
+class TDspider(scrapy.Spider):
+    name = "td"
+    start_urls = ["https://td.wd3.myworkdayjobs.com/en-US/TD_Bank_Careers?locationCountry=a30a87ed25634629aa6c3958aa2b91ea&timeType=14c9322ea8e3014f4096d9d2dc025400"]
 
     def __init__(self, *args, **kwargs):
-        super(workdayspider, self).__init__(*args, **kwargs)
-        
-         # Read URLs from a text file (one per line)
-        with open('workdaylinklist.txt', 'r') as f:
-            self.start_urls = [line.strip() for line in f if line.strip()]
-
-    def start_requests(self):
-        for url in self.start_urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+        super().__init__(*args, **kwargs)
+        self.exclude_words = load_exclude_words() 
 
     def parse(self, response):
         options = Options()
@@ -44,7 +47,7 @@ class workdayspider(scrapy.Spider):
                 for job in jobs:
                     title = job.text.strip()
                     print(f"🟩 [DEBUG] Extracted job title: '{title}'")
-                    if not any(word.lower() in title.lower() for word in ["Senior","law","clerk","officer","designer","mortgage","Application","Co-Op", "Lead", "Director", "bilingual", "Engineer", "Manager", "Testing", "finance", "financial", "III", "security", "IV", "scientist", "personal", "portfolio", "sr.", "sr "]):
+                    if not any(word.lower() in title.lower() for word in self.exclude_words):
                         try:
                             job_card = job.find_element(By.XPATH, "./ancestor::li[.//a[@data-automation-id='jobTitle']]")
                             date_elem = job_card.find_element(By.XPATH, ".//div[@data-automation-id='postedOn']//dd")
@@ -66,7 +69,7 @@ class workdayspider(scrapy.Spider):
                     time.sleep(1)  # delay between processing jobs to avoid rapid scraping
 
                 try:
-                    next_btn = self.driver.find_element(By.XPATH, "//button[contains(@aria-label, 'next')]")
+                    next_btn = driver.find_element(By.XPATH, "//button[contains(@aria-label, 'next')]")
                     print(f"➡️ [DEBUG] Found Next button. Classes: {next_btn.get_attribute('class')}")
                     if "disabled" in next_btn.get_attribute("class"):
                         break
