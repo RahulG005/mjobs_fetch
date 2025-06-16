@@ -12,7 +12,7 @@ def load_exclude_words(filename="exclude_words.txt"):
 class ElutaSpider(scrapy.Spider):
     name = "eluta"
     start_urls = [
-        "https://www.eluta.ca/search?q=power+bi&salary_type=1&filter-salary=&filter-ef=&filter-field=&filter-eterm=&filter-etype=&filter-experience=&filter-remote_jobs=&filter-location=&filter-radius=&sort=post"
+        "https://www.eluta.ca/search?q=excel+customer+data&salary_type=1&filter-salary=&filter-ef=&filter-field=&filter-eterm=&filter-etype=&filter-experience=&filter-remote_jobs=&filter-location=&filter-radius=&sort=post"
     ]
 
     
