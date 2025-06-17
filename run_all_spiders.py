@@ -3,7 +3,8 @@ import subprocess
 spiders = [
     'td',
     'cibc',
-    'eluta'
+    'eluta',
+    'rbc'
 ]
 
 output_file = 'output.json'  # or 'output.jsonl' for JSON Lines format
