@@ -5,14 +5,14 @@ spiders = [
     'cibc',
     'eluta',
     'rbc',
-    'manulife'
+    'manulife',
+    'scotiabank'
 ]
 
-output_file = 'output.json'  # or 'output.jsonl' for JSON Lines format
+output_file = 'output.json'
 
 for spider in spiders:
     print(f"Running spider: {spider}")
-    # Use -o for append mode; change to -O for overwrite
     result = subprocess.run(
         ['scrapy', 'crawl', spider, '-o', output_file],
         capture_output=False  # Set to True if you want to capture output in Python
