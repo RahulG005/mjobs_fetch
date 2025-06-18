@@ -4,7 +4,8 @@ spiders = [
     'td',
     'cibc',
     'eluta',
-    'rbc'
+    'rbc',
+    'manulife'
 ]
 
 output_file = 'output.json'  # or 'output.jsonl' for JSON Lines format
