@@ -6,7 +6,8 @@ spiders = [
     'eluta',
     'rbc',
     'manulife',
-    'scotiabank'
+    'scotiabank',
+    'sunlife'
 ]
 
 output_file = 'output.json'
